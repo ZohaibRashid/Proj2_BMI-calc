@@ -9,6 +9,7 @@ function App() {
     });
 
     const [bmi, setBMI] = useState ("");
+    const [message, setMessage] = useState("");
 
 
     function handleChange(event){
@@ -32,15 +33,35 @@ function App() {
 
     }
 
- 
+    const displayMessage = result =>{
+    
+      if(result < 18){
+        setMessage("you are underweight");
+        }
+        else if(result >= 18 && result <25){
+          setMessage("You are in great shape!!");
+        }
+        else{
+          setMessage("you are overweight");
+        }
+    
+
+    }
 
     function calculateBMI(event){
       event.preventDefault();
 
-        const result = input.weight/Math.pow(input.height, 2);
+      if(input.weight === 0 || input.height === 0){
+        alert("Please enter valid height and weight");
+      }
+      else{
 
-        setBMI(result.toFixed(1));
-        
+        let result = input.weight/Math.pow((input.height/100), 2);
+        result = result.toFixed(1);
+        setBMI(result);
+
+        displayMessage(result);
+      }
      }
 
       function clearResults(){
@@ -55,13 +76,11 @@ function App() {
 
   
     
-
-
   return (
     <div className = "container">
         <form>
         <div className = "textbox height"> 
-          <label>Height (m)</label>
+          <label>Height (cm)</label>
           <input type = "text" name = "height" value = {input.height} onChange = {handleChange}></input>
           </div>
           
@@ -70,11 +89,13 @@ function App() {
           <input type = "text" name = "weight" value = {input.weight} onChange = {handleChange}></input>
         
           </div>
-          <button type = "submit" onClick = {calculateBMI} >Calculate</button>
-          <button type = "submit" onClick = {clearResults} >clear</button>
+          <button className = "submit" type = "submit" onClick = {calculateBMI} >Calculate</button>
+          <button className = "clear" type = "submit" onClick = {clearResults} >clear</button>
         </form>
         <div className = "bmi">
         <h1>Your BMI is: {bmi}</h1>
+        <p>{message}</p>
+
         </div>
     </div>
     );
